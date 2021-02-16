@@ -1,0 +1,16 @@
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\Presentation.exe
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\appsettings.json
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\Presentation.dll
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\Presentation.deps.json
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\Presentation.runtimeconfig.json
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\Presentation.pdb
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\Common.dll
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\DataAccess.dll
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\DataModel.dll
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\DataService.dll
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\WebFramework.dll
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\WebFramework.pdb
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\Common.pdb
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\DataAccess.pdb
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\DataModel.pdb
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\AdminPanelAPIGateway\Publish\DataService.pdb

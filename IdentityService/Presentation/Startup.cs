@@ -35,7 +35,7 @@ namespace Presentation
             
             if (env.IsDevelopment())
             {
-                //app.UseDeveloperExceptionPage();
+                
             }
             else
             {

@@ -8,6 +8,9 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using WebFramework.Extensions.APIStatus;
+using WebFramework.Extensions.MongoDatabase;
+using WebFramework.Extensions.ServiceContainer;
 
 namespace Presentation
 {
@@ -19,35 +22,60 @@ namespace Presentation
         }
 
         public IConfiguration Configuration { get; }
-
-        // This method gets called by the runtime. Use this method to add services to the container.
-        public void ConfigureServices(IServiceCollection services)
+        
+        public void ConfigureServices(IServiceCollection services) /*Service Container*/
         {
-            services.AddRazorPages();
+            services.AddControllers();
+            
+            /*-------------------------------------------------------*/
+            
+            /*Hasan's Codes*/
+            services.AddMongoDatabaseToConfigure(Configuration);
+            services.AddMongoDatabaseToServiceContainer(Configuration);
+            services.AddPureServicesToServiceContainer();
+            services.AddAPIStatusToConfigure(Configuration);
+            /*Hasan's Codes*/
         }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env) /*Middleware*/
         {
+            app.UseExceptionHandler();
+            
+            /*-------------------------------------------------------*/
+            
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                
             }
             else
             {
-                app.UseExceptionHandler("/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
 
+            /*-------------------------------------------------------*/
+            
             app.UseHttpsRedirection();
             app.UseStaticFiles();
+            
+            /*-------------------------------------------------------*/
+
+            app.UseAuthentication();
+            
+            /*-------------------------------------------------------*/
 
             app.UseRouting();
+            
+            /*-------------------------------------------------------*/
+
+            app.UseCors("CORS");
+            
+            /*-------------------------------------------------------*/
 
             app.UseAuthorization();
+            
+            /*-------------------------------------------------------*/
 
-            app.UseEndpoints(endpoints => { endpoints.MapRazorPages(); });
+            app.UseEndpoints(endpoints => endpoints.MapControllers());
         }
     }
 }

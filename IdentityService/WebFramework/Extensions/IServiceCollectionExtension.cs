@@ -2,6 +2,10 @@
 using System.Text;
 using System.Threading.Tasks;
 using DataAccess;
+using DataAccess.CustomRepositories;
+using DataModel;
+using DataService.RoleServices;
+using DataService.UserServices;
 using Hangfire;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -9,6 +13,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.IdentityModel.Tokens;
+using WebFramework.Exceptions;
 
 namespace WebFramework.Extensions
 {
@@ -17,15 +22,18 @@ namespace WebFramework.Extensions
         public static IServiceCollection AddDatabaseContainer(this IServiceCollection service, IConfiguration configuration)
         {
             string ConnectionString = configuration.GetConnectionString("SQL Server");
-            //return service.AddDbContext<DatabaseContext>(Config => Config.UseSqlServer(ConnectionString));
-            return service;
+            return service.AddDbContext<DatabaseContext>(Config => Config.UseSqlServer(ConnectionString));
         }
         
         public static IServiceCollection AddIocContainer(this IServiceCollection service)
         {
-            //User's DataService
-            //service.AddScoped<UserService<UsersViewModel, User>, UserService>();
-            //User's DataService
+            //User's Service
+            service.AddScoped<UserRepository<User>, UserService>();
+            //User's Service
+            
+            //Role's Service
+            service.AddScoped<RoleRepository<Role>, RoleService>();
+            //Role's Service
 
             return service;
         }
@@ -53,15 +61,15 @@ namespace WebFramework.Extensions
 
         public static IServiceCollection AddIdentityContainer(this IServiceCollection service, IConfiguration configuration)
         {
-            // service.AddIdentity<User, Role>(options =>
-            // {
-            //     options.Password.RequireDigit     = configuration.GetValue<bool>("Password:RequireDigit");
-            //     options.Password.RequiredLength   = configuration.GetValue<int> ("Password:RequiredLength");
-            //     options.Password.RequireLowercase = configuration.GetValue<bool>("Password:RequireLowercase");
-            //     options.Password.RequireUppercase = configuration.GetValue<bool>("Password:RequireUppercase");
-            // })
-            // .AddEntityFrameworkStores<DatabaseContext>()
-            // .AddDefaultTokenProviders();
+            service.AddIdentity<User, Role>(options =>
+            {
+                options.Password.RequireDigit     = configuration.GetValue<bool>("Password:RequireDigit");
+                options.Password.RequiredLength   = configuration.GetValue<int> ("Password:RequiredLength");
+                options.Password.RequireLowercase = configuration.GetValue<bool>("Password:RequireLowercase");
+                options.Password.RequireUppercase = configuration.GetValue<bool>("Password:RequireUppercase");
+            })
+            .AddEntityFrameworkStores<DatabaseContext>()
+            .AddDefaultTokenProviders();
             
             return service;
         }
@@ -75,50 +83,50 @@ namespace WebFramework.Extensions
 
         public static IServiceCollection AddJWTContainer(this IServiceCollection service, IConfiguration configuration)
         {
-            // service.AddAuthentication().AddJwtBearer(Config =>
-            // {
-            //     /*در این قسمت موقع ارسال درخواست به سرور ، موارد ( اطلاعات ) موجود در سرور با اطلاعات ارسالی ( توکن ) بررسی می گردد*/
-            //     /*در صورت وجود هر گونه تفاوتی بین داده های تنظیم شده در سرور با اطلاعات ارسالی از سمت کاربر ( توکن ) ؛ اعتبارسنجی کاربر نامعتبر خواهد شد*/
-            //     Config.TokenValidationParameters = new TokenValidationParameters
-            //     {
-            //         ValidIssuer      = configuration.GetValue<string>("JWT:Issuer"),   /*صادر کننده*/
-            //         ValidAudience    = configuration.GetValue<string>("JWT:Audience"), /*مصرف کننده*/
-            //         IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes( configuration.GetValue<string>("JWT:Key") )),
-            //         
-            //         ValidateIssuer           = true,
-            //         ValidateAudience         = true,
-            //         ValidateIssuerSigningKey = true,
-            //         ValidateLifetime         = true
-            //     };
-            //
-            //     /*در این قسمت بررسی می شود که در صورت بروز هر گونه خطایی از سمت سرور ، چه واکنش مناسبی به کلاینت ( کاربر ) ارسال گردد*/
-            //     Config.Events = new JwtBearerEvents
-            //     {
-            //         OnAuthenticationFailed = context =>
-            //         {
-            //             /*در این قسمت ؛ صحت توکن ارسالی کاربر بررسی می گردد و در صورت نادرست بودن توکن ارسالی ؛ خطای مناسب برای کاربر صادر می گردد*/
-            //             if (context.Exception.GetType() == typeof(SecurityTokenSignatureKeyNotFoundException)) throw new TokenNotValidException();
-            //                 
-            //             /*در این قسمت ؛ دلیل عدم موفقیت آمیز بودن احراز هویت ، منقضی شدن زمان توکن می باشد که باید در این صورت خطای مناسب به کاربر صادر گردد*/
-            //             if (context.Exception.GetType() == typeof(SecurityTokenExpiredException)) throw new TokenExpireException();
-            //             
-            //             return Task.CompletedTask;
-            //         }
-            //         
-            //         ,
-            //         
-            //         /*این قسمت مربوط به سطوح دسترسی یا همان ACL می باشد*/
-            //         OnForbidden = context => throw new UnAuthorizedException()
-            //         
-            //         ,
-            //         
-            //         OnChallenge = delegate(JwtBearerChallengeContext context)
-            //         {
-            //             if (context.AuthenticateFailure != null) throw new AuthenticationFaildException();
-            //             return Task.CompletedTask;
-            //         }
-            //     };
-            // });
+            service.AddAuthentication().AddJwtBearer(Config =>
+            {
+                /*در این قسمت موقع ارسال درخواست به سرور ، موارد ( اطلاعات ) موجود در سرور با اطلاعات ارسالی ( توکن ) بررسی می گردد*/
+                /*در صورت وجود هر گونه تفاوتی بین داده های تنظیم شده در سرور با اطلاعات ارسالی از سمت کاربر ( توکن ) ؛ اعتبارسنجی کاربر نامعتبر خواهد شد*/
+                Config.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidIssuer      = configuration.GetValue<string>("JWT:Issuer"),   /*صادر کننده*/
+                    ValidAudience    = configuration.GetValue<string>("JWT:Audience"), /*مصرف کننده*/
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes( configuration.GetValue<string>("JWT:Key") )),
+                    
+                    ValidateIssuer           = true,
+                    ValidateAudience         = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidateLifetime         = true
+                };
+            
+                /*در این قسمت بررسی می شود که در صورت بروز هر گونه خطایی از سمت سرور ، چه واکنش مناسبی به کلاینت ( کاربر ) ارسال گردد*/
+                Config.Events = new JwtBearerEvents
+                {
+                    OnAuthenticationFailed = context =>
+                    {
+                        /*در این قسمت ؛ صحت توکن ارسالی کاربر بررسی می گردد و در صورت نادرست بودن توکن ارسالی ؛ خطای مناسب برای کاربر صادر می گردد*/
+                        if (context.Exception.GetType() == typeof(SecurityTokenSignatureKeyNotFoundException)) throw new TokenNotValidException();
+                            
+                        /*در این قسمت ؛ دلیل عدم موفقیت آمیز بودن احراز هویت ، منقضی شدن زمان توکن می باشد که باید در این صورت خطای مناسب به کاربر صادر گردد*/
+                        if (context.Exception.GetType() == typeof(SecurityTokenExpiredException)) throw new TokenExpireException();
+                        
+                        return Task.CompletedTask;
+                    }
+                    
+                    ,
+                    
+                    /*این قسمت مربوط به سطوح دسترسی یا همان ACL می باشد*/
+                    OnForbidden = context => throw new UnAuthorizedException()
+                    
+                    ,
+                    
+                    OnChallenge = delegate(JwtBearerChallengeContext context)
+                    {
+                        if (context.AuthenticateFailure != null) throw new AuthenticationFaildException();
+                        return Task.CompletedTask;
+                    }
+                };
+            });
             
             return service;
         }

@@ -8,9 +8,7 @@ using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using WebFramework.Extensions.APIStatus;
-using WebFramework.Extensions.MongoDatabase;
-using WebFramework.Extensions.ServiceContainer;
+using WebFramework.Extensions;
 
 namespace Presentation
 {
@@ -30,10 +28,11 @@ namespace Presentation
             /*-------------------------------------------------------*/
             
             /*Hasan's Codes*/
-            services.AddMongoDatabaseToConfigure(Configuration);
+            services.AddConfiguresToServiceContainer(Configuration);
             services.AddMongoDatabaseToServiceContainer(Configuration);
-            services.AddPureServicesToServiceContainer();
-            services.AddAPIStatusToConfigure(Configuration);
+            services.AddIocServiceContainer();
+            services.AddFiltersToServiceContainer();
+            services.AddGlobalObjectsToServiceContainer();
             /*Hasan's Codes*/
         }
         

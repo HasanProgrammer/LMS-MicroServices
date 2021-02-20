@@ -33,6 +33,12 @@ namespace DataService.VideoServices
             var videos = await _Videos.FindAsync(video => video.User.Username.Equals(username));
             return await videos.ToListAsync();
         }
+
+        public override async Task<Video> FindWithTitleAsync(string title)
+        {
+            var videos = await _Videos.FindAsync(video => video.Title.Equals(title));
+            return await videos.FirstOrDefaultAsync();
+        }
     }
     
     /*CRUD*/

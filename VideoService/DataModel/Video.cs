@@ -12,9 +12,11 @@ namespace DataModel
         public string Duration  { get; set; } /*مدت زمان فیلم برنامه نویسی*/
         public string VideoFile { get; set; } /*مسیر ذخیره شدن فایل فیلم برنامه نویسی*/
         public bool IsFree      { get; set; }
-        public Status Status    { get; set; }
         public string CreatedAt { get; set; }
         public string UpdatedAt { get; set; }
+        
+        [BsonRepresentation(BsonType.Int32)]
+        public Status Status { get; set; }
     }
     
     /*Relation*/

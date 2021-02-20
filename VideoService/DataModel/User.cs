@@ -18,9 +18,11 @@ namespace DataModel
         public string Description { get; set; }
         public bool IsVerifyEmail { get; set; }
         public bool IsVerifyPhone { get; set; }
-        public Status Status      { get; set; }
         public string CreatedAt   { get; set; }
         public string UpdatedAt   { get; set; }
+        
+        [BsonRepresentation(BsonType.Int32)]
+        public Status Status { get; set; }
     }
 
     /*Relation*/

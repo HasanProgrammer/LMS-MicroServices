@@ -1,6 +1,8 @@
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Common;
 using DataAccess.CustomRepositories;
 using DataAccess.ViewModels;
 using DataModel;
@@ -62,6 +64,25 @@ namespace DataService.VideoServices
                 TermId       = video.Term?.Id,
                 TermName     = video.Term.Name
             }).ToList();
+        }
+
+        public async Task<bool> AddAsync(CreateVideoModel model)
+        {
+            /*در این قسمت بررسی می شود که آیا Title فیلم مورد نظر، قبلا انتخاب شده است یا خیر*/
+            if (await _VideoService.FindWithTitleAsync(model.Title) != null) throw new Exception("فیلد ( عنوان ) باید یکتا باشد");
+
+            /*در این قسمت پس از بررسی های لازمه و اعتبارسنجی ثانویه ViewModel ؛ یک فیلم جدید منتشر می گردد*/
+            return await _VideoService.AddAsync(new Video
+            {
+                Id        = Guid.NewGuid().ToString(),
+                Title     = model.Title,
+                Duration  = model.Duration,
+                VideoFile = model.File,
+                IsFree    = Convert.ToBoolean(model.IsFree),
+                CreatedAt = PersianDatetime.Now(),
+                UpdatedAt = PersianDatetime.Now(),
+                Status    = DataModel.Enums.Video.Status.Active
+            });
         }
     }
 }

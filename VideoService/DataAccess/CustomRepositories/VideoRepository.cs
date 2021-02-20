@@ -246,6 +246,7 @@ namespace DataAccess.CustomRepositories
     public abstract partial class VideoRepository<TModel>
     {
         /*Fetch*/
+        public virtual Task<TModel> FindWithTitleAsync(string title) => null;
         public virtual List<TModel> FindAllForUser(string username) => null;
         public virtual Task<List<TModel>> FindAllForUserAsync(string username) => null;
     }

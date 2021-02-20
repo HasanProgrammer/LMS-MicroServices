@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Linq;
@@ -8,9 +9,11 @@ using DataAccess.ViewModels;
 using DataModel;
 using DataService.VideoServices;
 using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using WebFramework.Filters;
 
 namespace Presentation.Controllers.V1
 {
@@ -40,7 +43,7 @@ namespace Presentation.Controllers.V1
         }
 
         [HttpGet]
-        [Route(template: "", Name = "Video.All.Paginate")]
+        [Route(template: "", Name = "Video.All")]
         public async Task<JsonResult> Index()
         {
             /*باید نقش کاربری ( Role ) که توکن خود را به این مسیر ارسال کرده بازیابی کرد*/
@@ -60,9 +63,19 @@ namespace Presentation.Controllers.V1
 
         [HttpPost]
         [Route(template: "create", Name = "Video.Create")]
-        public void Create()
+        [ServiceFilter(typeof(ModelValidation))]
+        public async Task<JsonResult> Create([FromForm] CreateVideoModel model)
         {
-            
+            try
+            {
+                if (await _VideoService.AddAsync(model))
+                    return JsonResponse.Return(_StatusCode.SuccessCreate, _StatusMessage.SuccessCreate, new { });
+                return JsonResponse.Return(_StatusCode.ErrorCreate, _StatusMessage.ErrorCreate, new { });
+            }
+            catch (Exception e)
+            {
+                return JsonResponse.Return(_StatusCode.ErrorCreate, e.Message, new { });
+            }
         }
     }
 }

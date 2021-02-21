@@ -10,41 +10,45 @@ using MongoDB.Driver;
 
 namespace DataAccess.ViewModels
 {
-    public class CreateVideoModel
+    /*Video Fields | Main*/
+    public partial class CreateVideoModel 
     {
-        public string ChapterId { get; set; }
-        
-        [Required(ErrorMessage = "فیلد ( دوره ) الزامی می باشد")]
-        public string TermId { get; set; }
-        
-        [Required(ErrorMessage = "فیلد ( رایگان بودن یا نبودن ) الزامی می باشد")]
-        [CheckIsFreeKey(ErrorMessage = "فیلد ( رایگان بودن یا نبودن ) باید یک عدد ( 0 یا 1 ) باشد")]
-        public int? IsFree { get; set; }
-        
-        [Required(ErrorMessage = "فیلد ( عنوان ) الزامی می باشد")]
-        public string Title { get; set; }
-        
-        [Required(ErrorMessage = "فیلد ( مدت زمان ) الزامی می باشد")]
+        public int IsFree      { get; set; }
+        public string Title    { get; set; }
         public string Duration { get; set; }
-        
-        [Required(ErrorMessage = "فیلد ( فایل ) الزامی می باشد")]
-        public string File { get; set; }
-        
-        /*-----------------------------------------------------------*/
-        
-        public class CheckIsFreeKey : ValidationAttribute
-        {
-            protected override ValidationResult IsValid(object value, ValidationContext validationContext)
-            {
-                if (value != null)
-                {
-                    if((int)value != 0 && (int)value != 1)
-                        return new ValidationResult(ErrorMessage);
-                    return ValidationResult.Success;
-                }
-                
-                return ValidationResult.Success;
-            }
-        }
+        public string File     { get; set; }
+    }
+    
+    /*User Fields*/
+    public partial class CreateVideoModel
+    {
+        public string UserId          { get; set; }
+        public string UserImage       { get; set; }
+        public string UserName        { get; set; }
+        public string UserEmail       { get; set; }
+        public string UserPhone       { get; set; }
+        public string UserExpert      { get; set; }
+        public string UserDescription { get; set; }
+    }
+    
+    /*Term Fields*/
+    public partial class CreateVideoModel
+    {
+        public string TermId          { get; set; }
+        public string TermName        { get; set; }
+        public string TermDescription { get; set; }
+        public string TermSuitable    { get; set; }
+        public string TermResult      { get; set; }
+        public int TermPrice          { get; set; }
+        public bool TermHasChapter    { get; set; }
+        public string TermDateStart   { get; set; }
+        public string TermDateEnd     { get; set; }
+    }
+    
+    /*Chapter Fields*/
+    public partial class CreateVideoModel
+    {
+        public string ChapterId    { get; set; }
+        public string ChapterTitle { get; set; }
     }
 }

@@ -81,7 +81,37 @@ namespace DataService.VideoServices
                 IsFree    = Convert.ToBoolean(model.IsFree),
                 CreatedAt = PersianDatetime.Now(),
                 UpdatedAt = PersianDatetime.Now(),
-                Status    = DataModel.Enums.Video.Status.Active
+                Status    = DataModel.Enums.Video.Status.Active,
+                
+                User = new User
+                {
+                    Id          = model.UserId,
+                    ImageFile   = model.UserImage,
+                    Username    = model.UserName,
+                    Email       = model.UserEmail,
+                    Phone       = model.UserPhone,
+                    Expert      = model.UserExpert,
+                    Description = model.UserDescription
+                },
+                
+                Term = new Term
+                {
+                    Id          = model.TermId,
+                    Name        = model.TermName,
+                    Description = model.TermDescription,
+                    Suitable    = model.TermSuitable,
+                    Result      = model.TermResult,
+                    Price       = model.TermPrice,
+                    HasChapter  = model.TermHasChapter,
+                    DateStart   = model.TermDateStart,
+                    DateEnd     = model.TermDateEnd 
+                },
+                
+                Chapter = new Chapter
+                {
+                    Id    = model.ChapterId,
+                    Title = model.ChapterTitle 
+                }
             });
         }
     }

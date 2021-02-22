@@ -35,6 +35,7 @@ namespace WebFramework.Extensions
             /*Consumers*/
 
             /*Producers*/
+            service.AddSingleton<Common.RabbitMQ>();
             /*Producers*/
         }
         

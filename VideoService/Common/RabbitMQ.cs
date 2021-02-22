@@ -23,7 +23,7 @@ namespace Common
                     HostName = rabbit.Value.HostName,
                     UserName = rabbit.Value.Username,
                     Password = rabbit.Value.Password,
-                    Port     = rabbit.Value.Port 
+                    Port     = rabbit.Value.Port
                 };
 
                 _Connection = factory.CreateConnection();

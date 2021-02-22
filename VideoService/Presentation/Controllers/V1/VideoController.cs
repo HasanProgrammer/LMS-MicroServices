@@ -13,7 +13,9 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using WebFramework.Exceptions;
 using WebFramework.Filters;
+using WebFramework.Services;
 
 namespace Presentation.Controllers.V1
 {
@@ -21,7 +23,7 @@ namespace Presentation.Controllers.V1
     public class VideoController : BaseVideoController
     {
         //Services
-        private readonly Service _VideoService;
+        private readonly VideoService _VideoService;
         
         //Configs
         private readonly Config.StatusCode _StatusCode;
@@ -29,7 +31,7 @@ namespace Presentation.Controllers.V1
         
         public VideoController
         (
-            Service                     VideoService,
+            VideoService                VideoService,
             IOptions<Config.StatusCode> StatusCode,
             IOptions<Config.Messages>   StatusMessage
         )
@@ -64,7 +66,7 @@ namespace Presentation.Controllers.V1
         [HttpPost]
         [Route(template: "create", Name = "Video.Create")]
         [ServiceFilter(typeof(ModelValidation))]
-        public async Task<JsonResult> Create([FromForm] CreateVideoModel model)
+        public async Task<JsonResult> Create(CreateVideoModel model)
         {
             try
             {
@@ -72,9 +74,30 @@ namespace Presentation.Controllers.V1
                     return JsonResponse.Return(_StatusCode.SuccessCreate, _StatusMessage.SuccessCreate, new { });
                 return JsonResponse.Return(_StatusCode.ErrorCreate, _StatusMessage.ErrorCreate, new { });
             }
-            catch (Exception e)
+            catch (UniqueTitleFieldException e)
             {
-                return JsonResponse.Return(_StatusCode.ErrorCreate, e.Message, new { });
+                throw new UniqueTitleFieldException(e.Message);
+            }
+        }
+
+        [HttpPatch]
+        [Route(template: "edit/{id:int}", Name = "Video.Edit")]
+        [ServiceFilter(typeof(ModelValidation))]
+        public async Task<JsonResult> Edit(int id, EditVideoModel model)
+        {
+            try
+            {
+                if(await _VideoService.ChangeAsync(id, model, HttpContext))
+                    return JsonResponse.Return(_StatusCode.SuccessEdit, _StatusMessage.SuccessEdit, new { });
+                return JsonResponse.Return(_StatusCode.ErrorEdit, _StatusMessage.ErrorEdit, new { });
+            }
+            catch (NotFoundException e)
+            {
+                throw new NotFoundException(e.Message);
+            }
+            catch (AclException e)
+            {
+                throw new AclException(e.Message);
             }
         }
     }

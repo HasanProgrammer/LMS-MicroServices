@@ -12,6 +12,22 @@ namespace Common
         }
     }
     
+    public partial class Config /*RabbitMQ*/
+    {
+        public class RabbitMQ
+        {
+            public string Username { get; set; }
+            public string Password { get; set; }
+            public string HostName { get; set; }
+            public int Port        { get; set; }
+        }
+        
+        public class Queues
+        {
+            public string IdentityService { get; set; }
+        }
+    }
+    
     public partial class Config /*ClientURL*/
     {
         public class ClientURL

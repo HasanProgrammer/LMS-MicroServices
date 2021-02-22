@@ -1,12 +1,15 @@
 using Common;
+using DataAccess;
 using DataAccess.CustomRepositories;
 using DataModel;
 using DataService;
+using DataService.CacheServices;
 using DataService.RabbitMQServices;
 using DataService.VideoServices;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
+using StackExchange.Redis;
 using WebFramework.Filters;
 using VideoService = WebFramework.Services.VideoService;
 
@@ -21,11 +24,18 @@ namespace WebFramework.Extensions
             service.Configure<Config.MongoDatabase>(configuration.GetSection("MongoDatabase"));
             service.Configure<Config.RabbitMQ>     (configuration.GetSection("RabbitMQ"));
             service.Configure<Config.Queues>       (configuration.GetSection("RabbitMQ.Queues"));
+            service.Configure<Config.Redis>        (configuration.GetSection("Redis"));
         }
         
         public static void AddMongoDatabaseToServiceContainer(this IServiceCollection service, IConfiguration configuration)
         {
             service.AddSingleton(new MongoClient(configuration.GetSection("MongoDatabase:ConnectionString").Value));
+        }
+
+        public static void AddRedisCacheToServiceContainer(this IServiceCollection service, IConfiguration configuration)
+        {
+            service.AddSingleton<IConnectionMultiplexer>(ServiceProvider => ConnectionMultiplexer.Connect(configuration.GetValue<string>("Redis:Connection")));
+            service.AddSingleton<ICacheService, CacheService>();
         }
 
         public static void AddRabbitMQToServiceContainer(this IServiceCollection service, IConfiguration configuration)

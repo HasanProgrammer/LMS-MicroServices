@@ -27,6 +27,14 @@ namespace Common
             public string IdentityService { get; set; }
         }
     }
+
+    public partial class Config
+    {
+        public class Redis
+        {
+            public string Connection { get; set; }
+        }
+    }
     
     public partial class Config /*ClientURL*/
     {

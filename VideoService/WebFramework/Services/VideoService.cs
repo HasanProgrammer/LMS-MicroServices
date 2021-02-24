@@ -36,13 +36,8 @@ namespace WebFramework.Services
                 StatusValue  = video.Status == DataModel.Enums.Video.Status.Active ? "فعال" : "غیر فعال",
                 DateCreated  = video.CreatedAt,
                 DateUpdated  = video.UpdatedAt,
-                UserId       = video.User.Id,
-                UserName     = video.User.Username,
-                UserImage    = video.User.ImageFile,
                 ChapterId    = video.Chapter?.Id,
-                ChapterTitle = video.Chapter?.Title,
-                TermId       = video.Term?.Id,
-                TermName     = video.Term.Name
+                ChapterTitle = video.Chapter?.Title
             }).ToList();
         }
         
@@ -60,13 +55,8 @@ namespace WebFramework.Services
                 StatusValue  = video.Status == DataModel.Enums.Video.Status.Active ? "فعال" : "غیر فعال",
                 DateCreated  = video.CreatedAt,
                 DateUpdated  = video.UpdatedAt,
-                UserId       = video.User.Id,
-                UserName     = video.User.Username,
-                UserImage    = video.User.ImageFile,
                 ChapterId    = video.Chapter?.Id,
-                ChapterTitle = video.Chapter?.Title,
-                TermId       = video.Term?.Id,
-                TermName     = video.Term.Name
+                ChapterTitle = video.Chapter?.Title
             }).ToList();
         }
 
@@ -86,32 +76,7 @@ namespace WebFramework.Services
                 CreatedAt = PersianDatetime.Now(),
                 UpdatedAt = PersianDatetime.Now(),
                 Status    = DataModel.Enums.Video.Status.Active,
-                
-                User = new User
-                {
-                    Id          = model.UserId,
-                    ImageFile   = model.UserImage,
-                    Username    = model.UserName,
-                    Email       = model.UserEmail,
-                    Phone       = model.UserPhone,
-                    Expert      = model.UserExpert,
-                    Description = model.UserDescription
-                },
-                
-                Term = new Term
-                {
-                    Id          = model.TermId,
-                    Name        = model.TermName,
-                    Description = model.TermDescription,
-                    Suitable    = model.TermSuitable,
-                    Result      = model.TermResult,
-                    Price       = model.TermPrice,
-                    HasChapter  = model.TermHasChapter,
-                    DateStart   = model.TermDateStart,
-                    DateEnd     = model.TermDateEnd 
-                },
-                
-                Chapter = new Chapter
+                Chapter   = new Chapter
                 {
                     Id    = model.ChapterId,
                     Title = model.ChapterTitle 
@@ -128,7 +93,7 @@ namespace WebFramework.Services
             /*در این قسمت باید بررسی گردد که فیلم مربوطه را Admin ویرایش می کنه یا کاربری دیگه ، ( اگر کاربری دیگه ویرایش می کنه ؛ باید معلوم شه این فیلم واسه خود کاربره و نه کس دیگه ؛ ACL*/
             JwtSecurityToken token = new JwtSecurityTokenHandler().ReadToken(await context.GetTokenAsync("access_token")) as JwtSecurityToken;
             if (!token.Claims.FirstOrDefault(claim => claim.Type == "Role").Value.Equals("Admin"))
-                if (!token.Claims.FirstOrDefault(claim => claim.Type == "Username").Value.Equals(video.User.Username))
+                if (!token.Claims.FirstOrDefault(claim => claim.Type == "UniqueId").Value.Equals(video.UserId))
                     throw new AclException("شما دسترسی لازم برای ویرایش فیلم مورد نظر را دارا نمی باشید");
             
             /*در این قسمت فیلم مورد نظر ویرایش می گردد*/
@@ -137,18 +102,9 @@ namespace WebFramework.Services
             video.Duration  = model.Duration;
 
             if (model.File != null) video.VideoFile = model.File;
-
-            video.Term.Id          = model.TermId;
-            video.Term.Name        = model.TermName;
-            video.Term.Description = model.TermDescription;
-            video.Term.Suitable    = model.TermSuitable;
-            video.Term.Result      = model.TermResult;
-            video.Term.Price       = model.TermPrice;
-            video.Term.HasChapter  = model.TermHasChapter;
-            video.Term.DateStart   = model.TermDateStart;
-            video.Term.DateEnd     = model.TermDateEnd;
-            video.Chapter.Id       = model.ChapterId;
-            video.Chapter.Title    = model.ChapterTitle;
+            
+            video.Chapter.Id    = model.ChapterId;
+            video.Chapter.Title = model.ChapterTitle;
 
             await _VideoService.ChangeAsync(video, id);
             return true;

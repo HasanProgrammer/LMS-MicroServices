@@ -2,7 +2,6 @@ using Common;
 using DataAccess;
 using DataAccess.CustomRepositories;
 using DataModel;
-using DataService;
 using DataService.CacheServices;
 using DataService.RabbitMQServices;
 using DataService.VideoServices;
@@ -52,7 +51,7 @@ namespace WebFramework.Extensions
         public static void AddIocServiceContainer(this IServiceCollection service)
         {
             /*Video's Services*/
-            service.AddScoped<VideoRepository<Video>, MongoVideoService>();
+            service.AddScoped<VideoRepository<Video>, SQLVideoService>();
             /*Video's Services*/
         }
 

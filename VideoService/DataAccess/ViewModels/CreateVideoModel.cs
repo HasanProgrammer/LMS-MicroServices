@@ -19,32 +19,6 @@ namespace DataAccess.ViewModels
         public string File     { get; set; }
     }
     
-    /*User Fields*/
-    public partial class CreateVideoModel
-    {
-        public string UserId          { get; set; }
-        public string UserImage       { get; set; }
-        public string UserName        { get; set; }
-        public string UserEmail       { get; set; }
-        public string UserPhone       { get; set; }
-        public string UserExpert      { get; set; }
-        public string UserDescription { get; set; }
-    }
-    
-    /*Term Fields*/
-    public partial class CreateVideoModel
-    {
-        public string TermId          { get; set; }
-        public string TermName        { get; set; }
-        public string TermDescription { get; set; }
-        public string TermSuitable    { get; set; }
-        public string TermResult      { get; set; }
-        public int TermPrice          { get; set; }
-        public bool TermHasChapter    { get; set; }
-        public string TermDateStart   { get; set; }
-        public string TermDateEnd     { get; set; }
-    }
-    
     /*Chapter Fields*/
     public partial class CreateVideoModel
     {

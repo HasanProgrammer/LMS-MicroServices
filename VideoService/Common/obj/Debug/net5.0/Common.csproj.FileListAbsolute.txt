@@ -3,3 +3,10 @@ C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\Video
 C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\VideoService\Common\obj\Debug\net5.0\Common.AssemblyInfoInputs.cache
 C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\VideoService\Common\obj\Debug\net5.0\Common.AssemblyInfo.cs
 C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\VideoService\Common\obj\Debug\net5.0\Common.csproj.CoreCompileInputs.cache
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\VideoService\Common\bin\Debug\net5.0\Common.deps.json
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\VideoService\Common\bin\Debug\net5.0\Common.dll
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\VideoService\Common\bin\Debug\net5.0\ref\Common.dll
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\VideoService\Common\bin\Debug\net5.0\Common.pdb
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\VideoService\Common\obj\Debug\net5.0\Common.dll
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\VideoService\Common\obj\Debug\net5.0\ref\Common.dll
+C:\Users\Programmer\Desktop\ASP Core Projects\EMarket-MicroServices\Source\VideoService\Common\obj\Debug\net5.0\Common.pdb

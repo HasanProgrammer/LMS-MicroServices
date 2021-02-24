@@ -14,21 +14,7 @@ namespace DataAccess.ViewModels
         public string StatusValue { get; set; }
         public string DateCreated { get; set; }
         public string DateUpdated { get; set; }
-        
-        /*-----------------------------------------------------------*/
-        
-        public string UserId    { get; set; } /*ناشر فیلم*/
-        public string UserName  { get; set; } /*ناشر فیلم*/
-        public string UserImage { get; set; }
-        
-        /*-----------------------------------------------------------*/
-        
         public string ChapterId  { get; set; }
         public string ChapterTitle { get; set; }
-        
-        /*-----------------------------------------------------------*/
-        
-        public string TermId { get; set; }
-        public string TermName { get; set; }
     }
 }

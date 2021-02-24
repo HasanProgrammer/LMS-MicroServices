@@ -10,12 +10,9 @@ namespace Common
     {
         private readonly IConnection _Connection;
         private readonly IModel      _Channel;
-        private readonly string      _QueueName;
         
-        public RabbitMQ(IOptions<Config.RabbitMQ> rabbit, IOptions<Config.Queues> queue)
+        public RabbitMQ(IOptions<Config.RabbitMQ> rabbit)
         {
-            _QueueName = queue.Value.IdentityService;
-            
             try
             {
                 var factory = new ConnectionFactory
@@ -28,7 +25,6 @@ namespace Common
 
                 _Connection = factory.CreateConnection();
                 _Channel    = _Connection.CreateModel();
-
             }
             catch (Exception e)
             {
@@ -36,9 +32,9 @@ namespace Common
             }
         }
         
-        public void PublishMessage(object payload)
+        public void PublishMessage(object payload, string queue)
         {
-            _Channel.QueueDeclare(queue: _QueueName, durable: false, exclusive: false, autoDelete: false, arguments: null);
+            _Channel.QueueDeclare(queue: queue, durable: false, exclusive: false, autoDelete: false, arguments: null);
             _Channel.BasicPublish(exchange: null, routingKey: null, basicProperties: null, body: Encoding.UTF8.GetBytes(JsonConvert.SerializeObject(payload)));
         }
 

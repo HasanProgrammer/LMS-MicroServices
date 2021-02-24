@@ -25,7 +25,7 @@ namespace DataService.RabbitMQServices
         )
         : base(rabbit)
         {
-            QueueName = queue.Value.IdentityService; /*اسم Queue کانال ارتباطی RabbitMQ ؛ برای اطلاع از تغییرات اطلاعات کاربر*/
+            QueueName = queue.Value.UserUpdatedInfo; /*اسم Queue کانال ارتباطی RabbitMQ ؛ برای اطلاع از تغییرات اطلاعات کاربر*/
             _Provider = Provider;
             _Database = database.Value;
         }

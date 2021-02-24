@@ -9,6 +9,7 @@ using DataAccess.ViewModels;
 using DataModel;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Http;
+using Microsoft.Extensions.Options;
 using WebFramework.Exceptions;
 
 namespace WebFramework.Services.WebSPA
@@ -17,15 +18,21 @@ namespace WebFramework.Services.WebSPA
     {
         private readonly VideoRepository<Video>     _VideoService;
         private readonly ChapterRepository<Chapter> _ChapterService;
+        private readonly Common.RabbitMQ            _MessageProducer;
+        private readonly Config.Queues              _RabbitOptions;
         
         public VideoService
         (
             VideoRepository<Video>     VideoService,
-            ChapterRepository<Chapter> ChapterService
+            ChapterRepository<Chapter> ChapterService,
+            Common.RabbitMQ            MessageProducer,
+            IOptions<Config.Queues>    Options
         )
         {
-            _VideoService   = VideoService;
-            _ChapterService = ChapterService;
+            _VideoService    = VideoService;
+            _ChapterService  = ChapterService;
+            _MessageProducer = MessageProducer;
+            _RabbitOptions   = Options.Value;
         }
 
         public async Task<List<VideosViewModel>> GetAllAsync(string tokenKey)
@@ -182,7 +189,17 @@ namespace WebFramework.Services.WebSPA
                 if (!token.Claims.FirstOrDefault(claim => claim.Type == "UniqueId").Value.Equals(video.UserId))
                     throw new AclException("شما دسترسی لازم برای حذف فیلم مورد نظر را دارا نمی باشید");
 
-            return await _VideoService.RemoveAsync(id);
+            if (await _VideoService.RemoveAsync(id))
+            {
+                /*در این قسمت باید یک Message برای FileService ارسال گردد و فیلم مربوطه از FileService حذف گردد*/
+                _MessageProducer.PublishMessage(new
+                {
+                    Free = video.IsFree,
+                    File = video.VideoFile
+                }, _RabbitOptions.DeleteVideoFile);
+            }
+
+            return false;
         }
     }
 }

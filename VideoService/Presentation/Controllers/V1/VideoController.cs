@@ -29,11 +29,15 @@ namespace Presentation.Controllers.V1
         private readonly Config.StatusCode _StatusCode;
         private readonly Config.Messages   _StatusMessage;
         
+        //RabbitMQ
+        private readonly Common.RabbitMQ _MessageProducer;
+        
         public VideoController
         (
             VideoService                VideoService,
             IOptions<Config.StatusCode> StatusCode,
-            IOptions<Config.Messages>   StatusMessage
+            IOptions<Config.Messages>   StatusMessage,
+            Common.RabbitMQ             MessageProducer
         )
         {
             //Services
@@ -42,12 +46,15 @@ namespace Presentation.Controllers.V1
             //Configs
             _StatusCode    = StatusCode.Value;
             _StatusMessage = StatusMessage.Value;
+            
+            //RabbitMQ
+            _MessageProducer = MessageProducer;
         }
 
         [HttpGet]
         [Route(template: "", Name = "Video.All")]
         public async Task<JsonResult> Index()
-        { 
+        {
             return JsonResponse.Return(_StatusCode.SuccessFetchData, _StatusMessage.SuccessFetchData, new
             {
                 videos = _VideoService.GetAllAsync(await HttpContext.GetTokenAsync("access_token"))

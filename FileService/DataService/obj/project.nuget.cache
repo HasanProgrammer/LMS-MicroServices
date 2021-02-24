@@ -1,0 +1,12 @@
+{
+  "version": 2,
+  "dgSpecHash": "8eTUD47E1bs4fLYFsUgamDv1uG/iWoX+Ni+oUCi5+uan1qmSVM/pwTWmyG/xPQnSJmIvQB0soUguhmHWE19nsg==",
+  "success": true,
+  "projectFilePath": "C:\\Users\\Programmer\\Desktop\\ASP Core Projects\\EMarket-MicroServices\\Source\\FileService\\DataService\\DataService.csproj",
+  "expectedPackageFiles": [
+    "C:\\Users\\Programmer\\.nuget\\packages\\rabbitmq.client\\6.2.1\\rabbitmq.client.6.2.1.nupkg.sha512",
+    "C:\\Users\\Programmer\\.nuget\\packages\\system.memory\\4.5.4\\system.memory.4.5.4.nupkg.sha512",
+    "C:\\Users\\Programmer\\.nuget\\packages\\system.threading.channels\\4.7.1\\system.threading.channels.4.7.1.nupkg.sha512"
+  ],
+  "logs": []
+}

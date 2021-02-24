@@ -2365,7 +2365,10 @@
         },
         "runtime": {
           "bin/placeholder/Common.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       },
       "DataModel/1.0.0": {
         "type": "project",
@@ -2378,7 +2381,10 @@
         },
         "runtime": {
           "bin/placeholder/DataModel.dll": {}
-        }
+        },
+        "frameworkReferences": [
+          "Microsoft.AspNetCore.App"
+        ]
       }
     }
   },
@@ -7968,6 +7974,9 @@
         "assetTargetFallback": true,
         "warn": true,
         "frameworkReferences": {
+          "Microsoft.AspNetCore.App": {
+            "privateAssets": "none"
+          },
           "Microsoft.NETCore.App": {
             "privateAssets": "all"
           }

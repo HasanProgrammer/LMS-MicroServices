@@ -49,6 +49,7 @@ namespace WebFramework.Extensions
         {
             /*Consumers*/
             service.AddHostedService<UserUpdatedListenerService>();
+            service.AddHostedService<ChapterUpdatedListenerService>();
             /*Consumers*/
 
             /*Producers*/

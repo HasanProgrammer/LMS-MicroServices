@@ -1,11 +1,10 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using DataModel;
 
 namespace DataAccess.CustomRepositories
 {
     /*Main*/
-    public abstract partial class VideoRepository<TModel> : IRepository<TModel> where TModel : class
+    public abstract partial class ChapterRepository<TModel> : IRepository<TModel> where TModel : class
     {
         public virtual List<TModel> FindAll()
         {
@@ -209,7 +208,7 @@ namespace DataAccess.CustomRepositories
     }
     
     /*Main*/
-    public abstract partial class VideoRepository<TModel>
+    public abstract partial class ChapterRepository<TModel>
     {
         public virtual bool Add(TModel model)
         {
@@ -253,13 +252,7 @@ namespace DataAccess.CustomRepositories
     }
     
     /*Custom*/
-    public abstract partial class VideoRepository<TModel>
+    public abstract partial class ChapterRepository<TModel>
     {
-        /*Fetch*/
-        public virtual Task<TModel> FindWithTitleAsync(string title) => null;
-        public virtual Task<TModel> FindWithTitleAsNoTrackingAsync(string title) => null;
-        public virtual List<TModel> FindAllForUser(string username) => null;
-        public virtual Task<List<TModel>> FindAllForUserAsync(string id) => null;
-        public virtual Task<List<TModel>> FindAllForUserAsNoTrackingAsync(string id) => null;
     }
 }

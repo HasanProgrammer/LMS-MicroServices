@@ -82,5 +82,7 @@ namespace DataAccess
 
         public bool Remove(object id);
         public Task<bool> RemoveAsync(object id);
+        public Task<bool> Remove(TModel model);
+        public Task<bool> RemoveAsync(TModel model);
     }
 }

@@ -15,7 +15,7 @@ using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using WebFramework.Exceptions;
 using WebFramework.Filters;
-using WebFramework.Services;
+using WebFramework.Services.WebSPA;
 
 namespace Presentation.Controllers.V1
 {
@@ -47,20 +47,11 @@ namespace Presentation.Controllers.V1
         [HttpGet]
         [Route(template: "", Name = "Video.All")]
         public async Task<JsonResult> Index()
-        {
-            /*باید نقش کاربری ( Role ) که توکن خود را به این مسیر ارسال کرده بازیابی کرد*/
-            JwtSecurityToken token = new JwtSecurityTokenHandler().ReadToken(await HttpContext.GetTokenAsync("access_token")) as JwtSecurityToken;
-
-            /*اگر کاربر Admin بود می بایست ، لیست تمام فیلم ها را واکشی کرد*/
-            /*اگر کاربر غیر Admin بود ، می بایست فیلم های مربوط به کاربر را واکشی کرد*/
-            List<VideosViewModel> videos = token.Claims.FirstOrDefault(claim => claim.Type == "Role").Value.Equals("Admin")
-                                 ?
-                                 await _VideoService.GetAllAsync()
-                                 :
-                                 await _VideoService.GetAllForUserAsync(token.Claims.FirstOrDefault(claim => claim.Type == "Username").Value);
-            
-            /*در این قسمت خروجی نهایی API فیلم ها به کاربر ارسال می گردد*/
-            return JsonResponse.Return(_StatusCode.SuccessFetchData, _StatusMessage.SuccessFetchData, new { videos });
+        { 
+            return JsonResponse.Return(_StatusCode.SuccessFetchData, _StatusMessage.SuccessFetchData, new
+            {
+                videos = _VideoService.GetAllAsync(await HttpContext.GetTokenAsync("access_token"))
+            });
         }
 
         [HttpPost]
@@ -80,16 +71,76 @@ namespace Presentation.Controllers.V1
             }
         }
 
-        [HttpPatch]
-        [Route(template: "edit/{id:int}", Name = "Video.Edit")]
+        [HttpPut]
+        [Route(template: "edit/{id}", Name = "Video.Edit")]
         [ServiceFilter(typeof(ModelValidation))]
-        public async Task<JsonResult> Edit(int id, EditVideoModel model)
+        public async Task<JsonResult> Edit(string id, EditVideoModel model)
         {
             try
             {
-                if(await _VideoService.ChangeAsync(id, model, HttpContext))
+                if(await _VideoService.ChangeAsync(id, model, await HttpContext.GetTokenAsync("access_token")))
                     return JsonResponse.Return(_StatusCode.SuccessEdit, _StatusMessage.SuccessEdit, new { });
                 return JsonResponse.Return(_StatusCode.ErrorEdit, _StatusMessage.ErrorEdit, new { });
+            }
+            catch (NotFoundException e)
+            {
+                throw new NotFoundException(e.Message);
+            }
+            catch (AclException e)
+            {
+                throw new AclException(e.Message);
+            }
+        }
+
+        [HttpPatch]
+        [Route(template: "active/{id}", Name = "Video.Active")]
+        public async Task<JsonResult> Active(string id)
+        {
+            try
+            {
+                if(await _VideoService.ActiveAsync(id, await HttpContext.GetTokenAsync("access_token")))
+                    return JsonResponse.Return(_StatusCode.SuccessEdit, _StatusMessage.SuccessEdit, new { });
+                return JsonResponse.Return(_StatusCode.ErrorEdit, _StatusMessage.ErrorEdit, new { });
+            }
+            catch (NotFoundException e)
+            {
+                throw new NotFoundException(e.Message);
+            }
+            catch (AclException e)
+            {
+                throw new AclException(e.Message);
+            }
+        }
+        
+        [HttpPatch]
+        [Route(template: "inactive/{id}", Name = "Video.InActive")]
+        public async Task<JsonResult> InActive(string id)
+        {
+            try
+            {
+                if(await _VideoService.InActiveAsync(id, await HttpContext.GetTokenAsync("access_token")))
+                    return JsonResponse.Return(_StatusCode.SuccessEdit, _StatusMessage.SuccessEdit, new { });
+                return JsonResponse.Return(_StatusCode.ErrorEdit, _StatusMessage.ErrorEdit, new { });
+            }
+            catch (NotFoundException e)
+            {
+                throw new NotFoundException(e.Message);
+            }
+            catch (AclException e)
+            {
+                throw new AclException(e.Message);
+            }
+        }
+
+        [HttpDelete]
+        [Route(template: "delete/{id}", Name = "Video.Delete")]
+        public async Task<JsonResult> Delete(string id)
+        {
+            try
+            {
+                if(await _VideoService.RemoveAsync(id, await HttpContext.GetTokenAsync("access_token")))
+                    return JsonResponse.Return(_StatusCode.SuccessDelete, _StatusMessage.SuccessDelete, new { });
+                return JsonResponse.Return(_StatusCode.ErrorDelete, _StatusMessage.ErrorDelete, new { });
             }
             catch (NotFoundException e)
             {

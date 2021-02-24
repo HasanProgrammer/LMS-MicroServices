@@ -3,14 +3,16 @@ using DataAccess;
 using DataAccess.CustomRepositories;
 using DataModel;
 using DataService.CacheServices;
+using DataService.ChapterServices;
 using DataService.RabbitMQServices;
 using DataService.VideoServices;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using MongoDB.Driver;
 using StackExchange.Redis;
 using WebFramework.Filters;
-using VideoService = WebFramework.Services.VideoService;
+using VideoService = WebFramework.Services.WebSPA.VideoService;
 
 namespace WebFramework.Extensions
 {
@@ -24,6 +26,12 @@ namespace WebFramework.Extensions
             service.Configure<Config.RabbitMQ>     (configuration.GetSection("RabbitMQ"));
             service.Configure<Config.Queues>       (configuration.GetSection("RabbitMQ.Queues"));
             service.Configure<Config.Redis>        (configuration.GetSection("Redis"));
+        }
+        
+        public static void AddSQLDatabaseToServiceContainer(this IServiceCollection service, IConfiguration configuration)
+        {
+            string ConnectionString = configuration.GetConnectionString("SQL Server");
+            service.AddDbContext<DatabaseContext>(Config => Config.UseSqlServer(ConnectionString), ServiceLifetime.Singleton);
         }
         
         public static void AddMongoDatabaseToServiceContainer(this IServiceCollection service, IConfiguration configuration)
@@ -53,6 +61,10 @@ namespace WebFramework.Extensions
             /*Video's Services*/
             service.AddScoped<VideoRepository<Video>, SQLVideoService>();
             /*Video's Services*/
+            
+            /*Chapter's Service*/
+            service.AddScoped<ChapterRepository<Chapter>, SQLChapterService>();
+            /*Chapter's Service*/
         }
 
         public static void AddFiltersToServiceContainer(this IServiceCollection service)

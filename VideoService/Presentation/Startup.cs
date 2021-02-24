@@ -29,7 +29,7 @@ namespace Presentation
             
             /*Hasan's Codes*/
             services.AddConfiguresToServiceContainer(Configuration);
-            services.AddMongoDatabaseToServiceContainer(Configuration);
+            services.AddSQLDatabaseToServiceContainer(Configuration);
             services.AddRabbitMQToServiceContainer(Configuration);
             services.AddIocServiceContainer();
             services.AddFiltersToServiceContainer();

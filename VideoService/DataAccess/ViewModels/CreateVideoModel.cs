@@ -19,6 +19,18 @@ namespace DataAccess.ViewModels
         public string File     { get; set; }
     }
     
+    /*User Fields*/
+    public partial class CreateVideoModel
+    {
+        public string UserId { get; set; }
+    }
+    
+    /*Term Fields*/
+    public partial class CreateVideoModel
+    {
+        public string TermId { get; set; }
+    }
+    
     /*Chapter Fields*/
     public partial class CreateVideoModel
     {
